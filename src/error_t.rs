@@ -1,3 +1,5 @@
+use crate::statemachine::StateMachine;
+
 pub struct GPIO_Error {
     message: &'static str,
     pin_number: u8,
@@ -12,3 +14,17 @@ impl GPIO_Error {
     }
 }
 
+
+pub struct StateError {
+    message: &'static str,
+    curr_state: StateMachine,
+}
+
+impl StateError {
+    pub fn new(message: &str, curr_state: StateMachine) -> StateError {
+        StateError {
+            message,
+            curr_state,
+        }
+    }
+}
