@@ -23,7 +23,7 @@ impl StateMachineContext {
         }
     }
 
-    pub fn next(&mut self) -> Result<StateMachine, StateError> {
+    pub fn next(&mut self) -> Result<&StateMachine, StateError> {
         self.state = match self.state {
             StateMachine::ActiveMonitor => StateMachine::FuelBurnStart,
             StateMachine::FuelBurnStart => StateMachine::InjectionContinue,
@@ -34,11 +34,11 @@ impl StateMachineContext {
             StateMachine::EmergencyStop => 
                 return Err(StateError::new("EmergencyStop state reached", StateMachine::EmergencyStop)),
         };
-        Ok(self.state)
+        Ok(&self.state)
     }
 
-    pub fn get_state(&self) -> StateMachine {
-        self.state
+    pub fn get_state(&self) -> &StateMachine {
+        &self.state
     }
 
 }

@@ -1,3 +1,6 @@
+#![no_std]
+#![no_main]
+
 pub mod oxidizer_valve;
 pub mod injector_valve;
 pub mod shutoff;
