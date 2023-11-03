@@ -18,12 +18,14 @@
 
 # Compiling 
 
-`cargo build --release`  
+`cargo make build`
+
+> NOTE: Builds in debug mode for faster compilation times
 
 
 # Flashing
 
-`cargo clean`
+`cargo make flash`
 
-`cargo flash --chip STM32F303K8T6x --release`  
+> This will also compile the code in **release** mode
 
