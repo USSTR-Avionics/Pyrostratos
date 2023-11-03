@@ -1,0 +1,26 @@
+[tasks.build]
+command = "cargo"
+args = ["build"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+[tasks.release]
+command = "cargo"
+args = ["build", "--release"]
+
+[tasks.flash]
+dependencies = ["release"]
+script = [
+    "cargo flash --chip STM32F303K8Tx --release"
+]
+
+[tasks.run]
+dependencies = ["flash"]
+command = "cargo"
+args = ["embed"]
+
+[tasks.default]
+dependencies = ["run"]
+

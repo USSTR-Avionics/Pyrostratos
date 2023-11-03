@@ -14,6 +14,7 @@
 
 `cargo install cargo-flash`  
 
+`cargo install cargo-make`
 
 # Compiling 
 
@@ -21,6 +22,8 @@
 
 
 # Flashing
+
+`cargo clean`
 
 `cargo flash --chip STM32F303K8T6x --release`  
 
