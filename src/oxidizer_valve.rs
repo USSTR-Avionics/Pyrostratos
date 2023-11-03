@@ -1,14 +1,12 @@
 extern crate alloc;
 use alloc::vec::Vec;
 use core::default::Default;
-use core::result::Result::{Ok, Err};
 use core::result::Result;
+use core::result::Result::{Err, Ok};
 
+use super::error_t::GPIO_Error;
 use crate::sensor_pressure::PressureSensor;
 use crate::sensor_temperature::TemperatureSensor;
-use super::error_t::GPIO_Error;
-
-
 
 enum ValveState {
     Open,
@@ -24,7 +22,6 @@ pub struct OxidizerVentValve {
 }
 
 impl OxidizerVentValve {
-
     pub fn new() -> OxidizerVentValve {
         OxidizerVentValve {
             temperature_sensors: Vec::new(),
@@ -60,6 +57,4 @@ impl OxidizerVentValve {
         self.state = ValveState::Open;
         // open func
     }
-
 }
-

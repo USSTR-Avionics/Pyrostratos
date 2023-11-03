@@ -5,7 +5,6 @@ pub struct TemperatureSensor {
 }
 
 impl TemperatureSensor {
-
     pub fn new(pin: u8, addr: u8) -> TemperatureSensor {
         TemperatureSensor {
             value: f32::NAN,
@@ -20,4 +19,3 @@ impl TemperatureSensor {
         self.value
     }
 }
-

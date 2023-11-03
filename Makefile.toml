@@ -1,3 +1,6 @@
+[env]
+CHIP = "STM32F303K8Tx"
+
 [tasks.build]
 command = "cargo"
 args = ["build"]
@@ -12,15 +15,21 @@ args = ["build", "--release"]
 
 [tasks.flash]
 dependencies = ["release"]
-script = [
-    "cargo flash --chip STM32F303K8Tx --release"
-]
-
-[tasks.run]
-dependencies = ["flash"]
 command = "cargo"
-args = ["embed"]
+args = ["flash", "--chip", "${CHIP}", "--release"]
+# script = [
+#     "cargo flash --chip ${CHIP} --release"
+# ]
 
-[tasks.default]
-dependencies = ["run"]
+[tasks.help]
+script = [
+    """
+    printf "\\e[1;32m\\nUsage: cargo make <task>\\n\\e[0m"
+    printf "\t\\e[1;34mbuild\\e[0m : build (debug) the project\\n"
+    printf "\t\\e[1;34mclean\\e[0m : clean the build directory\\n"
+    printf "\t\\e[1;34mrelease\\e[0m : build (release) the project\\n"
+    printf "\t\\e[1;34mflash\\e[0m : flash the project to the target\\n"
+    printf "\t\\e[1;34mhelp\\e[0m : print this help message\\n"
+    """
+]
 

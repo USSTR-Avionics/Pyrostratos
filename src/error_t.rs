@@ -14,7 +14,6 @@ impl GPIO_Error {
     }
 }
 
-
 pub struct StateError {
     message: &'static str,
     curr_state: StateMachine,

@@ -1,8 +1,6 @@
-use core::result::Result::{Ok, Err};
-use core::result::Result;
 use super::error_t::StateError;
-
-
+use core::result::Result;
+use core::result::Result::{Err, Ok};
 
 pub enum StateMachine {
     ActiveMonitor,
@@ -27,12 +25,21 @@ impl StateMachineContext {
         self.state = match self.state {
             StateMachine::ActiveMonitor => StateMachine::FuelBurnStart,
             StateMachine::FuelBurnStart => StateMachine::InjectionContinue,
-            StateMachine::InjectionContinue => 
-                return Err(StateError::new("InjectionContinue state reached", StateMachine::InjectionContinue)),
-            StateMachine::Purge => 
-                return Err(StateError::new("Purge state reached", StateMachine::Purge)),
-            StateMachine::EmergencyStop => 
-                return Err(StateError::new("EmergencyStop state reached", StateMachine::EmergencyStop)),
+            StateMachine::InjectionContinue => {
+                return Err(StateError::new(
+                    "InjectionContinue state reached",
+                    StateMachine::InjectionContinue,
+                ))
+            }
+            StateMachine::Purge => {
+                return Err(StateError::new("Purge state reached", StateMachine::Purge))
+            }
+            StateMachine::EmergencyStop => {
+                return Err(StateError::new(
+                    "EmergencyStop state reached",
+                    StateMachine::EmergencyStop,
+                ))
+            }
         };
         Ok(&self.state)
     }
@@ -40,6 +47,4 @@ impl StateMachineContext {
     pub fn get_state(&self) -> &StateMachine {
         &self.state
     }
-
 }
-

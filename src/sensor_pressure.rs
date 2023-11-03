@@ -5,7 +5,6 @@ pub struct PressureSensor {
 }
 
 impl PressureSensor {
-
     pub fn new(pin: u8, addr: u8) -> PressureSensor {
         PressureSensor {
             value: f32::NAN,
@@ -20,4 +19,3 @@ impl PressureSensor {
         self.value
     }
 }
-
