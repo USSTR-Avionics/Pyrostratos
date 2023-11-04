@@ -1,5 +1,6 @@
 [env]
-CHIP = "STM32F303K8Tx"
+# CHIP = "STM32F303K8Tx"
+CHIP = "STM32F103R8"
 
 [tasks.build]
 command = "cargo"
@@ -17,6 +18,7 @@ args = ["build", "--release"]
 dependencies = ["release"]
 command = "cargo"
 args = ["flash", "--chip", "${CHIP}", "--release"]
+# args = ["embed", "--chip", "${CHIP}", "--release"]
 # script = [
 #     "cargo flash --chip ${CHIP} --release"
 # ]
