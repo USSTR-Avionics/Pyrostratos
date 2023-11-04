@@ -23,6 +23,18 @@ args = ["flash", "--chip", "${CHIP}", "--release"]
 #     "cargo flash --chip ${CHIP} --release"
 # ]
 
+[tasks.openocd]
+command = "openocd"
+# openocd -f interface/stlink-v2-1.cfg -f target/stm32f1x.cfg
+args = [
+    "-f", "interface/stlink-v2-1.cfg",
+    "-f", "target/stm32f1x.cfg"
+]
+
+[tasks.run]
+command = "cargo"
+args = ["run"]
+
 [tasks.help]
 script = [
     """
@@ -31,6 +43,8 @@ script = [
     printf "\t\\e[1;34mclean\\e[0m : clean the build directory\\n"
     printf "\t\\e[1;34mrelease\\e[0m : build (release) the project\\n"
     printf "\t\\e[1;34mflash\\e[0m : flash the project to the target\\n"
+    printf "\t\\e[1;34mopenocd\\e[0m : start openocd\\n"
+    printf "\t\\e[1;34mrun\\e[0m : run the project with gdb\\n"
     printf "\t\\e[1;34mhelp\\e[0m : print this help message\\n"
     """
 ]

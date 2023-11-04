@@ -5,6 +5,7 @@ extern crate panic_halt;
 
 use nb::block;
 use cortex_m_rt::entry;
+use cortex_m_semihosting::hprintln;
 use stm32f1::stm32f103;
 use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
 
@@ -34,10 +35,11 @@ fn main() -> ! {
     let mut led = gpioa.pa5.into_push_pull_output(&mut gpioa.crl);
     // Configure the syst timer to trigger an update every second
     let mut timer = Timer::syst(cp.SYST, &clocks).counter_hz();
-    timer.start(1.Hz()).unwrap();
+    timer.start(10.Hz()).unwrap();
 
     // Wait for the timer to trigger an update and change the state of the LED
     loop {
+        hprintln!("Hello, world!");
         block!(timer.wait()).unwrap();
         led.toggle();
         block!(timer.wait()).unwrap();

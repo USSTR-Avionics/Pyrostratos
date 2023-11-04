@@ -29,3 +29,16 @@
 
 > This will also compile the code in **release** mode
 
+# Running
+
+Have two terminal instances accessible
+
+`cargo make openocd`
+
+opens an openocd session, this is where your serial prints show up
+
+`cargo make run`
+
+this runs the runner and attaches the gdb session, press 'c' to continue on the gdb session
+
+
