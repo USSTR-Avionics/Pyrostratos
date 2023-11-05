@@ -1,5 +1,7 @@
 [build]
 target="thumbv7em-none-eabihf"
+# this is to ensure caching of the build artifacts
+rust-wrapper = "/$PATH/.cargo/bin/sccache"
 
 rustflags=["-C", "link-arg=-Tlink.x"]
 
