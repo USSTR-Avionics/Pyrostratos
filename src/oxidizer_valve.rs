@@ -4,7 +4,7 @@ use core::default::Default;
 use core::result::Result;
 use core::result::Result::{Err, Ok};
 
-use super::error_t::GPIO_Error;
+use super::error_t::GpioError;
 use crate::sensor_pressure::PressureSensor;
 use crate::sensor_temperature::TemperatureSensor;
 
@@ -36,16 +36,16 @@ impl OxidizerVentValve {
         self.temperature_sensors.push(sensor);
     }
 
-    pub fn get_temperature(&self) -> Result<f32, GPIO_Error> {
-        Err(GPIO_Error::new("Temperature is not set", 0))
+    pub fn get_temperature(&self) -> Result<f32, GpioError> {
+        Err(GpioError::new("Temperature is not set", 0))
     }
 
     pub fn subscribe_pressure_sensor(&mut self, sensor: PressureSensor) {
         self.pressure_sensors.push(sensor);
     }
 
-    pub fn get_pressure(&self) -> Result<f32, GPIO_Error> {
-        Err(GPIO_Error::new("Pressure is not set", 0))
+    pub fn get_pressure(&self) -> Result<f32, GpioError> {
+        Err(GpioError::new("Pressure is not set", 0))
     }
 
     pub fn close_valve(&mut self) {
