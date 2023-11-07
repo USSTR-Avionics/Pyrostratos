@@ -2,6 +2,7 @@ const MAX_SETS: usize = 10;
 const MAX_RULES: usize = 10;
 
 use core::alloc::{GlobalAlloc, Layout};
+use core::iter::zip;
 use core::ptr::null_mut;
 
 struct MyAllocator;
@@ -14,15 +15,6 @@ unsafe impl GlobalAlloc for MyAllocator {
 #[global_allocator]
 static GLOBAL: MyAllocator = MyAllocator;
 
-
-#[macro_export]
-macro_rules! fuzzy_rule {
-    ($engine:expr, IF $var:ident IS $set:ident THEN $conclusion:expr) => {
-        $engine.rule($var.clone(), $set, $conclusion);
-    };
-}
-
-
 #[derive(Copy, Clone)]
 pub struct FuzzySet<'a> {
     name: &'a str,
@@ -30,7 +22,6 @@ pub struct FuzzySet<'a> {
 }
 
 impl FuzzySet<'_> {
-
     pub fn new(name: &str, member_func: fn(f64) -> f64) -> FuzzySet {
         FuzzySet {
             name,
@@ -51,7 +42,6 @@ pub struct FuzzyVariable<'a> {
 }
 
 impl<'a> FuzzyVariable<'a> {
-
     pub fn new(name: &str) -> FuzzyVariable {
         FuzzyVariable {
             name,
@@ -60,8 +50,7 @@ impl<'a> FuzzyVariable<'a> {
         }
     }
 
-    // take in an array of any size and assign it to self.sets
-    pub fn add_sets(&'a mut self, sets: &[FuzzySet<'a>; MAX_SETS]) {
+    pub fn add_sets(&'a mut self, sets: &[FuzzySet<'a>]) {
         for i in 0..sets.len() {
             self.sets[i] = sets[i];
         }
@@ -83,7 +72,6 @@ pub struct FuzzyEngine<'a> {
 }
 
 impl<'a> FuzzyEngine<'a> {
-
     pub fn new() -> FuzzyEngine<'a> {
         FuzzyEngine {
             rules: [FuzzyRule { 
@@ -106,6 +94,23 @@ impl<'a> FuzzyEngine<'a> {
         }
     }
 
+    pub fn add_rules(&mut self, variable: &FuzzyVariable<'a>, sets: &[FuzzySet<'a>], conclusions: &[f64]) {
+        if self.num_rules < MAX_RULES {
+            for (i, j) in zip(sets, conclusions) {
+                self.rules[self.num_rules] = FuzzyRule {
+                    variable: *variable,
+                    set: *i,
+                    conclusion: *j
+                };
+            self.num_rules += 1;
+            }
+        }
+    }
+
+    pub fn get_inference_variable(&self) -> FuzzyVariable {
+        return self.rules[0].variable;
+    }
+
     pub fn infer(&self, input: &FuzzyVariable, input_variable: f64) -> f64 {
         let mut max_membership = 0.0;
         let mut conclusion = 0.0;
@@ -123,4 +128,5 @@ impl<'a> FuzzyEngine<'a> {
         conclusion
     }
 }
+
 
