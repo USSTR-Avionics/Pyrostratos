@@ -7,5 +7,4 @@ pub mod oxidizer_valve;
 pub mod sensor_pressure;
 pub mod sensor_temperature;
 pub mod shutoff;
-pub mod fuzzy_engine;
 pub mod statemachine;
