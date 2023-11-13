@@ -8,6 +8,7 @@ resolver = "2"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
 cortex-m-semihosting = "0.5.0"
+embedded-alloc = "0.5.1"
 heapless = "0.8.0"
 nb = "1.1.0"
 panic-halt = "0.2.0"
@@ -38,6 +39,8 @@ features = ["stm32f303", "rt"]
 version = "0.9.2"
 features = ["stm32f303x8", "rt", "ld"]
 
+[profile.dev]
+opt-level = "z"
 
 [profile.release]
 codegen-units = 1 # better optimizations

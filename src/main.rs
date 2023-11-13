@@ -9,13 +9,16 @@ use cortex_m_semihosting::hprintln;
 use stm32f1::stm32f103;
 use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
 
-use pyrostratos::fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet};
-
+use pyrostratos::{fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet}, embedded_allocator::init_allocator};
 
 
 #[entry]
+fn setup() -> ! {
+    init_allocator();
+    main();
+}
+
 fn main() -> ! {
-    /*
     let mut engine = FuzzyEngine::new();
 
     let low = FuzzySet::new("Low", |x| x / 10.0);
@@ -39,7 +42,6 @@ fn main() -> ! {
         let output = engine.infer(&temperature, input_temp as f64);
         hprintln!("Input temperature: {}, Output: {:.2}", input_temp, output);
     }
-    */
     
     // Get access to the core peripherals from the cortex-m crate
     let cp = cortex_m::Peripherals::take().unwrap();

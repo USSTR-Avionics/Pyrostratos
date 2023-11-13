@@ -8,4 +8,4 @@ pub mod sensor_pressure;
 pub mod sensor_temperature;
 pub mod statemachine;
 pub mod fuzzy_engine;
-pub mod dummy_allocator;
+pub mod embedded_allocator;
