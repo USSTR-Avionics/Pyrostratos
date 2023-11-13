@@ -2,6 +2,7 @@ use heapless::{String, Vec};
 
 const MAX_RULES: usize = 10;
 
+
 #[derive(Clone)]
 pub struct FuzzySet{ 
     name: String<32>,
@@ -79,4 +80,3 @@ impl FuzzyEngine {
         conclusion
     }
 }
-

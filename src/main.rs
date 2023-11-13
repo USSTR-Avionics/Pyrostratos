@@ -15,6 +15,7 @@ use pyrostratos::fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet};
 
 #[entry]
 fn main() -> ! {
+    /*
     let mut engine = FuzzyEngine::new();
 
     let low = FuzzySet::new("Low", |x| x / 10.0);
@@ -38,6 +39,7 @@ fn main() -> ! {
         let output = engine.infer(&temperature, input_temp as f64);
         hprintln!("Input temperature: {}, Output: {:.2}", input_temp, output);
     }
+    */
     
     // Get access to the core peripherals from the cortex-m crate
     let cp = cortex_m::Peripherals::take().unwrap();
