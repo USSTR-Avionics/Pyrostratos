@@ -16,6 +16,17 @@
 
 `cargo install cargo-make`
 
+`cargo install cargo-watch`
+
+`cargo install bacon`
+
+# Developing
+
+Automatically compile on save, useful when dealing with compiler bugs
+`cargo watch -x run`
+
+`bacon`
+
 # Compiling 
 
 `cargo make build`
