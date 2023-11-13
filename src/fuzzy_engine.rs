@@ -1,17 +1,17 @@
-use heapless::Vec;
+use heapless::{String, Vec};
 
 const MAX_RULES: usize = 10;
 
 #[derive(Clone)]
-pub struct FuzzySet<'a> {
-    name: &'a str,
+pub struct FuzzySet{ 
+    name: String<32>,
     membership_function: fn(f64) -> f64,
 }
 
-impl <'a>FuzzySet<'a> {
-    pub fn new(name: &'a str, membership_function: fn(f64) -> f64) -> Self {
+impl FuzzySet {
+    pub fn new(name: &str, membership_function: fn(f64) -> f64) -> Self {
         FuzzySet {
-            name,
+            name: String::<32>::try_from(name).unwrap(),
             membership_function,
         }
     }
@@ -22,43 +22,43 @@ impl <'a>FuzzySet<'a> {
 }
 
 #[derive(Clone)]
-pub struct FuzzyVariable<'a> {
-    name: &'a str,
-    sets: Vec<FuzzySet<'a>, MAX_RULES>,
+pub struct FuzzyVariable {
+    name: String<32>,
+    sets: Vec<FuzzySet, MAX_RULES>,
 }
 
-impl <'a>FuzzyVariable<'a> {
-    pub fn new(name: &'a str) -> Self {
+impl FuzzyVariable {
+    pub fn new(name: &str) -> Self {
         FuzzyVariable {
-            name,
-            sets: Vec::new(),
+            name: String::<32>::try_from(name).unwrap(), 
+            sets: Vec::<FuzzySet, MAX_RULES>::new(),
         }
     }
 
-    pub fn add_set(&mut self, set: &'a FuzzySet) {
+    pub fn add_set(&mut self, set: &FuzzySet) {
         self.sets.push(set.clone());
     }
 }
 
 #[derive(Clone)]
-pub struct Rule<'a> {
-    variable: FuzzyVariable<'a>,
-    set: FuzzySet<'a>,
+pub struct Rule {
+    variable: FuzzyVariable,
+    set: FuzzySet,
     conclusion: f64,
 }
 
-pub struct FuzzyEngine<'a> {
-    rules: Vec<Rule<'a>, MAX_RULES>,
+pub struct FuzzyEngine {
+    rules: Vec<Rule, MAX_RULES>,
 }
 
-impl <'a>FuzzyEngine<'a> {
+impl FuzzyEngine {
     pub fn new() -> Self {
         FuzzyEngine {
-            rules: Vec::new(),
+            rules: Vec::<Rule, MAX_RULES>::new(),
         }
     }
 
-    pub fn rule(&'a mut self, variable: FuzzyVariable<'a>, set: FuzzySet<'a>, conclusion: f64) {
+    pub fn rule(&mut self, variable: FuzzyVariable, set: FuzzySet, conclusion: f64) {
         self.rules.push(Rule { variable, set, conclusion });
     }
 
