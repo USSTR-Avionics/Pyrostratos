@@ -9,10 +9,35 @@ use cortex_m_semihosting::hprintln;
 use stm32f1::stm32f103;
 use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
 
+use pyrostratos::fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet};
+
 
 
 #[entry]
 fn main() -> ! {
+    let mut engine = FuzzyEngine::new();
+
+    let low = FuzzySet::new("Low", |x| x / 10.0);
+    let medium = FuzzySet::new("Medium", |x| {
+        let abs_val = if x < 0.0 { -x } else { x };
+        1.0 - 2.0 * (abs_val - 5.0) / 10.0
+    });
+    let high = FuzzySet::new("High", |x| (10.0 - x) / 10.0);
+
+    let mut temperature = FuzzyVariable::new("Temperature");
+    temperature.add_set(&low);
+    temperature.add_set(&medium);
+    temperature.add_set(&high);
+
+    engine.rule(temperature.clone(), low.clone(), 0.2);
+    engine.rule(temperature.clone(), medium.clone(), 0.6);
+    engine.rule(temperature.clone(), high.clone(), 0.9);
+
+    // Test loop for changing values of inputs
+    for input_temp in (0..=10).step_by(1) {
+        let output = engine.infer(&temperature, input_temp as f64);
+        hprintln!("Input temperature: {}, Output: {:.2}", input_temp, output);
+    }
     
     // Get access to the core peripherals from the cortex-m crate
     let cp = cortex_m::Peripherals::take().unwrap();
