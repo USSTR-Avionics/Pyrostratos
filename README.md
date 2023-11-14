@@ -22,7 +22,8 @@
 
 # Developing
 
-Automatically compile on save, useful when dealing with compiler bugs
+Automatically compile on save, useful when dealing with compiler bugs  
+
 `cargo watch -x run`
 
 `bacon`
