@@ -1,12 +1,17 @@
 [package]
 name = "pyrostratos"
 license = "MIT"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 resolver = "2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
+embassy-sync = { version = ">=0.4.0", git = "https://github.com/embassy-rs/embassy"}
+embassy-executor = { version = ">=0.3.3", git = "https://github.com/embassy-rs/embassy", features = ["integrated-timers"] }
+embassy-time = { version = ">=0.1.5", git = "https://github.com/embassy-rs/embassy", features = ["unstable-traits", "tick-hz-32_768"] }
+# embassy-stm32 = { version = ">=0.1.0", git = "https://github.com/embassy-rs/embassy", features = ["nightly", "unstable-traits", "stm32f429zi", "unstable-pac", "memory-x", "time-driver-any", "exti"]  }
+
 cortex-m-semihosting = "0.5.0"
 embedded-alloc = "0.5.1"
 heapless = "0.8.0"
