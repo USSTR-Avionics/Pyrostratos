@@ -12,6 +12,8 @@
 
 `sudo apt install libusb-1.0-0-dev`  
 
+`cargo install sccache --locked`
+
 `cargo install flip-link`
 
 `cargo install cargo-flash`  
@@ -35,6 +37,9 @@ Automatically compile on save, useful when dealing with compiler bugs
 `cargo make build`
 
 > NOTE: Builds in debug mode for faster compilation times
+
+To ensure caching, replace the `rustc-wrapper` path in `.cargo/config.toml` to 
+the appropriate **absolute** path.
 
 
 # Flashing
