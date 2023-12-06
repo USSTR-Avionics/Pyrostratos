@@ -1,3 +1,4 @@
+/// assumes a 0 to 180 degree servo
 pub struct ServoSweep {
     min_input: u16,
     max_input: u16,
