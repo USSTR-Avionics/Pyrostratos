@@ -16,6 +16,7 @@ use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
 use pyrostratos::{
     embedded_allocator::init_allocator,
     fuzzy_engine::{FuzzyEngine, FuzzySet, FuzzyVariable},
+    servo::ServoSweep,
 };
 
 #[entry]
@@ -99,6 +100,8 @@ fn main() -> ! {
     pwm.enable(Channel::C3);
 
     let max = pwm.get_max_duty();
+
+    let servo_control = ServoSweep::new(max.into());
 
     // TODO: check the correct duty cycle for the servo
     pwm.set_duty(Channel::C3, max);
