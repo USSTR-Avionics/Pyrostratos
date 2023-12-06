@@ -4,6 +4,7 @@
 
 extern crate panic_halt;
 
+use hal::{gpio, timer::{Tim2NoRemap, Channel}};
 // required for linker script
 #[allow(unused_imports)]
 use stm32f1::stm32f103;
@@ -11,7 +12,7 @@ use stm32f1::stm32f103;
 use nb::block;
 use cortex_m_rt::entry;
 use cortex_m_semihosting::hprintln;
-use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
+use stm32f1xx_hal::{self as hal, pac, prelude::*, time::ms,timer::Timer};
 
 use pyrostratos::{fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet}, embedded_allocator::init_allocator};
 
@@ -68,6 +69,9 @@ fn main() -> ! {
     // `clocks`
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
+    // Setup the alternate function I/O registers
+    let mut afio = dp.AFIO.constrain();
+
     // Acquire the GPIOA peripheral
     let mut gpioa = dp.GPIOA.split();
 
@@ -79,6 +83,37 @@ fn main() -> ! {
     let mut timer = Timer::syst(cp.SYST, &clocks).counter_hz();
     timer.start(10.Hz()).unwrap();
 
+    // TIM2
+    let c1 = gpioa.pa0.into_alternate_push_pull(&mut gpioa.crl);
+    let c2 = gpioa.pa1.into_alternate_push_pull(&mut gpioa.crl);
+    let c3 = gpioa.pa2.into_alternate_push_pull(&mut gpioa.crl);
+
+    let pins = (c1, c2, c3);
+
+    let mut pwm = dp.TIM2.pwm_hz::<Tim2NoRemap, _, _>(pins, &mut afio.mapr, 10.kHz(), &clocks);
+
+    // Enable clock each one of the channels
+    pwm.enable(Channel::C1);
+    pwm.enable(Channel::C2);
+    pwm.enable(Channel::C3);
+
+    let max = pwm.get_max_duty();
+
+    // TODO: check the correct duty cycle for the servo
+    pwm.set_duty(Channel::C3, max);
+
+    // Extract the C3 channel from the pwm object
+    let mut pwm_channel = pwm.split().2;
+
+    // Use the PwmChannel object to set C3 to be full strength
+    pwm_channel.set_duty(max);
+
+    // Use the PwmChannel object to set C3 to be dim
+    pwm_channel.set_duty(max / 4);
+ 
+    // Use the PwmChannel object to set C3 to be zero
+    pwm_channel.set_duty(0);
+ 
     // Wait for the timer to trigger an update and change the state of the LED
     loop {
         hprintln!("Hello, world!");
