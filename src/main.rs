@@ -1,21 +1,22 @@
 #![no_main]
 #![no_std]
 
-
 extern crate panic_halt;
 
-use hal::timer::{Tim2NoRemap, Channel};
+use hal::timer::{Channel, Tim2NoRemap};
 // NOTE: required for linker script
 #[allow(unused_imports)]
 use stm32f1::stm32f103;
 
-use nb::block;
 use cortex_m_rt::entry;
 use cortex_m_semihosting::hprintln;
+use nb::block;
 use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
 
-use pyrostratos::{fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet}, embedded_allocator::init_allocator};
-
+use pyrostratos::{
+    embedded_allocator::init_allocator,
+    fuzzy_engine::{FuzzyEngine, FuzzySet, FuzzyVariable},
+};
 
 #[entry]
 fn setup() -> ! {
@@ -24,7 +25,6 @@ fn setup() -> ! {
 }
 
 fn main() -> ! {
-
     // TODO: Add back in fuzzy logic
     /* Removing fuzzy logic for now, to test pws
 
@@ -53,7 +53,6 @@ fn main() -> ! {
     }
 
     */
-
 
     // Get access to the core peripherals from the cortex-m crate
     let cp = cortex_m::Peripherals::take().unwrap();
@@ -90,7 +89,9 @@ fn main() -> ! {
 
     let pins = (c1, c2, c3);
 
-    let mut pwm = dp.TIM2.pwm_hz::<Tim2NoRemap, _, _>(pins, &mut afio.mapr, 10.kHz(), &clocks);
+    let mut pwm = dp
+        .TIM2
+        .pwm_hz::<Tim2NoRemap, _, _>(pins, &mut afio.mapr, 10.kHz(), &clocks);
 
     // Enable clock each one of the channels
     pwm.enable(Channel::C1);
@@ -110,10 +111,10 @@ fn main() -> ! {
 
     // Use the PwmChannel object to set C3 to be dim
     pwm_channel.set_duty(max / 4);
- 
+
     // Use the PwmChannel object to set C3 to be zero
     pwm_channel.set_duty(0);
- 
+
     // Wait for the timer to trigger an update and change the state of the LED
     loop {
         hprintln!("Hello, world!");
@@ -122,6 +123,4 @@ fn main() -> ! {
         block!(timer.wait()).unwrap();
         led.toggle();
     }
-
 }
-

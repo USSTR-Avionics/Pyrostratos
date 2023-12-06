@@ -4,7 +4,7 @@ target="thumbv7em-none-eabihf"
 rust-wrapper = "$HOME/.cargo/bin/sccache"
 
 rustflags=[
-    "-C", "link-arg=-Tlink.x",
+    "-C", "link-arg=-Tlink.x", 
     "-Z", "threads=9",
     ]
 

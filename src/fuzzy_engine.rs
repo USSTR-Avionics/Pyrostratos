@@ -2,9 +2,8 @@ use heapless::{String, Vec};
 
 const MAX_RULES: usize = 10;
 
-
 #[derive(Clone)]
-pub struct FuzzySet{ 
+pub struct FuzzySet {
     name: String<32>,
     membership_function: fn(f64) -> f64,
 }
@@ -31,7 +30,7 @@ pub struct FuzzyVariable {
 impl FuzzyVariable {
     pub fn new(name: &str) -> Self {
         FuzzyVariable {
-            name: String::<32>::try_from(name).unwrap(), 
+            name: String::<32>::try_from(name).unwrap(),
             sets: Vec::<FuzzySet, MAX_RULES>::new(),
         }
     }
@@ -60,7 +59,11 @@ impl FuzzyEngine {
     }
 
     pub fn rule(&mut self, variable: FuzzyVariable, set: FuzzySet, conclusion: f64) {
-        self.rules.push(Rule { variable, set, conclusion });
+        self.rules.push(Rule {
+            variable,
+            set,
+            conclusion,
+        });
     }
 
     pub fn infer(&self, input: &FuzzyVariable, input_value: f64) -> f64 {
