@@ -1,13 +1,13 @@
 pub struct ServoSweep {
-    min_input: u32,
-    max_input: u32,
-    min_output: u32,
-    max_output: u32,
+    min_input: u16,
+    max_input: u16,
+    min_output: u16,
+    max_output: u16,
 }
 
 impl ServoSweep {
 
-    pub fn new(max_input: u32) -> Self {
+    pub fn new(max_input: u16) -> Self {
         // scaling outputs to avoid
         Self {
             min_input: max_input * 25 / 100,
@@ -18,7 +18,7 @@ impl ServoSweep {
     }
 
     // maps angular input to servo pulse width
-    pub fn map(&self, angle: u32) -> u32 {
+    pub fn map(&self, angle: u16) -> u16 {
         (angle - self.min_input) * (self.max_output - self.min_output) / (self.max_input - self.min_input) + self.min_output
     }
 

@@ -83,6 +83,9 @@ fn main() -> ! {
     let mut timer = Timer::syst(cp.SYST, &clocks).counter_hz();
     timer.start(10.Hz()).unwrap();
 
+    // Setup a general timer for ms delays
+    let mut delay_ms_timer = dp.TIM3.delay_ms(&clocks);
+
     // TIM2
     let c1 = gpioa.pa0.into_alternate_push_pull(&mut gpioa.crl);
     let c2 = gpioa.pa1.into_alternate_push_pull(&mut gpioa.crl);
@@ -101,7 +104,7 @@ fn main() -> ! {
 
     let max = pwm.get_max_duty();
 
-    let servo_control = ServoSweep::new(max.into());
+    let servo_control = ServoSweep::new(max);
 
     // TODO: check the correct duty cycle for the servo
     pwm.set_duty(Channel::C3, max);
@@ -121,9 +124,21 @@ fn main() -> ! {
     // Wait for the timer to trigger an update and change the state of the LED
     loop {
         hprintln!("Hello, world!");
+
         block!(timer.wait()).unwrap();
         led.toggle();
+
+        for i in 0..=180 {
+            pwm_channel.set_duty(servo_control.map(i));
+            delay_ms_timer.delay_ms(20u16);
+        }
+
         block!(timer.wait()).unwrap();
         led.toggle();
+
+        for i in (0..=180).rev() {
+            pwm_channel.set_duty(servo_control.map(i));
+            delay_ms_timer.delay_ms(20u16);
+        }
     }
 }
