@@ -18,6 +18,10 @@ heapless = "0.8.0"
 nb = "1.1.0"
 panic-halt = "0.2.0"
 
+[dependencies.rtic]
+version = "2.0.1"
+features = ["thumbv7-backend"]
+
 [dependencies.stm32f1]
 version = "0.15.1"
 features = ["stm32f103", "rt"]

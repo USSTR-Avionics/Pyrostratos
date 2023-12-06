@@ -12,6 +12,8 @@
 
 `sudo apt install libusb-1.0-0-dev`  
 
+`cargo install flip-link`
+
 `cargo install cargo-flash`  
 
 `cargo install cargo-make`
