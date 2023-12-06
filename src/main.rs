@@ -1,15 +1,17 @@
 #![no_main]
 #![no_std]
 
+
 extern crate panic_halt;
 
-use hal::timer::Pwm;
+// required for linker script
+#[allow(unused_imports)]
+use stm32f1::stm32f103;
+
 use nb::block;
 use cortex_m_rt::entry;
 use cortex_m_semihosting::hprintln;
-// required for linker script
-use stm32f1::stm32f103::{self, tim2};
-use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer, timer::pwm};
+use stm32f1xx_hal::{self as hal, pac, prelude::*, timer::Timer};
 
 use pyrostratos::{fuzzy_engine::{FuzzyEngine, FuzzyVariable, FuzzySet}, embedded_allocator::init_allocator};
 
@@ -21,6 +23,37 @@ fn setup() -> ! {
 }
 
 fn main() -> ! {
+
+    // TODO: Add back in fuzzy logic
+    /* Removing fuzzy logic for now, to test pws
+
+    let mut engine = FuzzyEngine::new();
+
+    let low = FuzzySet::new("Low", |x| x / 10.0);
+    let medium = FuzzySet::new("Medium", |x| {
+        let abs_val = if x < 0.0 { -x } else { x };
+        1.0 - 2.0 * (abs_val - 5.0) / 10.0
+    });
+    let high = FuzzySet::new("High", |x| (10.0 - x) / 10.0);
+
+    let mut temperature = FuzzyVariable::new("Temperature");
+    temperature.add_set(&low);
+    temperature.add_set(&medium);
+    temperature.add_set(&high);
+
+    engine.rule(temperature.clone(), low.clone(), 0.2);
+    engine.rule(temperature.clone(), medium.clone(), 0.6);
+    engine.rule(temperature.clone(), high.clone(), 0.9);
+
+    // Test loop for changing values of inputs
+    for input_temp in (0..=10).step_by(1) {
+        let output = engine.infer(&temperature, input_temp as f64);
+        hprintln!("Input temperature: {}, Output: {:.2}", input_temp, output);
+    }
+
+    */
+
+
     // Get access to the core peripherals from the cortex-m crate
     let cp = cortex_m::Peripherals::take().unwrap();
     // Get access to the device specific peripherals from the peripheral access crate
@@ -38,9 +71,6 @@ fn main() -> ! {
     // Acquire the GPIOA peripheral
     let mut gpioa = dp.GPIOA.split();
 
-    // Configure servo PWM pins
-    let p = 
-
     // Configure gpio A pin 5 as a push-pull output. The `crh` register is passed to the function
     // in order to configure the port. For pins 0-7, crl should be passed instead.
     let mut led = gpioa.pa5.into_push_pull_output(&mut gpioa.crl);
@@ -57,5 +87,6 @@ fn main() -> ! {
         block!(timer.wait()).unwrap();
         led.toggle();
     }
+
 }
 
